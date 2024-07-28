@@ -1,34 +1,43 @@
-// Define data
-var trace1 = {
-    type: 'scatterpolar',
-    r: [60, 70, 80], // Replace with your own data
-    theta: ['Factor 1', 'Factor 2', 'Factor 3'], // Replace with your own labels
-    fill: 'toself',
-    name: 'Dataset 1',
-    marker: {color: 'blue'}
-};
+ // Function to load JSON data and plot it
+ async function plotData() {
+    try {
+        const response = await fetch('https://feji1999.github.io/QuantEA/trades.json'); // Fetch data
+        const trades = await response.json();
 
-var trace2 = {
-    type: 'scatterpolar',
-    r: [50, 60, 70], // Replace with your own data
-    theta: ['Factor 1', 'Factor 2', 'Factor 3'], // Replace with your own labels
-    fill: 'toself',
-    name: 'Dataset 2',
-    marker: {color: 'red'}
-};
+        // Extract data for plotting
+        const winRatios = trades.map(trade => trade.winRatio);
+        const rewardRiskRatios = trades.map(trade => trade.rewardRiskRatio);
+        const tradeLabels = trades.map(trade => trade.trade);
 
-var data = [trace1, trace2];
+        // Define trace for scatter plot
+        const trace = {
+            x: rewardRiskRatios,
+            y: winRatios,
+            mode: 'markers+lines',
+            type: 'scatter',
+            text: tradeLabels,
+            marker: {
+                size: 10
+            }
+        };
 
-// Define layout
-var layout = {
-    polar: {
-        radialaxis: {
-            visible: true,
-            range: [0, 100] // Adjust based on your data range
-        }
-    },
-    title: 'Conjoined Triangle Chart'
-};
+        // Define layout for the plot
+        const layout = {
+            title: 'Traders Win Ratio vs Reward-Risk Ratio',
+            xaxis: {
+                title: 'Reward-Risk Ratio'
+            },
+            yaxis: {
+                title: 'Win Ratio'
+            }
+        };
 
-// Create the plot
-Plotly.newPlot('myRadarChart', data, layout);
+        // Plot the data
+        Plotly.newPlot('chart', [trace], layout);
+    } catch (error) {
+        console.error('Error loading JSON data:', error);
+    }
+}
+
+// Call the function to plot the data
+plotData();

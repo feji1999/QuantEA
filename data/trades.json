@@ -1,0 +1,42 @@
+[
+    {
+        "trade": "Trade 1",
+        "winRatio": 0.75,
+        "rewardRiskRatio": 1.5
+    },
+    {
+        "trade": "Trade 2",
+        "winRatio": 0.60,
+        "rewardRiskRatio": 2.0
+    },
+    {
+        "trade": "Trade 3",
+        "winRatio": 0.80,
+        "rewardRiskRatio": 1.2
+    },
+    {
+        "trade": "Trade 4",
+        "winRatio": 0.50,
+        "rewardRiskRatio": 1.8
+    },
+    {
+        "trade": "Trade 5",
+        "winRatio": 0.70,
+        "rewardRiskRatio": 1.0
+    },
+    {
+        "trade": "Trade 6",
+        "winRatio": 0.65,
+        "rewardRiskRatio": 1.6
+    },
+    {
+        "trade": "Trade 7",
+        "winRatio": 0.55,
+        "rewardRiskRatio": 2.2
+    },
+    {
+        "trade": "Trade 8",
+        "winRatio": 0.85,
+        "rewardRiskRatio": 1.4
+    }
+]
