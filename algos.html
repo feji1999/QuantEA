@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forex Charts Hourly Candle Trend Forecast</title>
+    <style>
+        body {
+            background-color: rgb(32, 100, 101);
+            border: gold solid 4px;
+            padding: 2px;
+        }
+        #chart {
+            width: 100%;
+            position: relative;
+            left: 2%;
+            display: flex;
+            align-items: flex-end;
+        }
+        #spot {
+            height: 60px;
+            width: 38%;
+            font-size: 18px;
+        }
+        #spot::placeholder {
+            text-align: center; /* Centers the placeholder text */
+        }
+
+        #results{
+            color: gold;
+        }
+        #advisor {
+            background-color: gold;
+            color: black;
+            height: 60px;
+            position: relative;
+            top: 10px;
+        }
+        #advisor h1 {
+            margin: 0;
+        }
+        .centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    
+    <div class="centered">
+        <input type="text" id="spot" onfocus="this.select();" placeholder="(Enter: Spot Price)">
+        <div id="results" style="margin-top: 20px;"></div>
+        <button id="advisor" onclick="spotx()"s>
+            <h1>Quant Analysis(Hourly)</h1>
+        </button>
+        
+    </div>
+
+    <div style="height: 30px; width: max; position: relative;"></div>
+    <div id="chart">
+        <!-- Displays the Forex Charts Hourly Candle Trend forecast after function runs successfully -->
+    </div>
+    <div style="height: 30px; width: max; position: relative;"></div>
+
+    <div id="myRadarChart" style="width: 100%; height: 500px;flex-direction: row;"></div>
+    
+    <script src="realtime.js"></script>
+    <script src="algos.js"></script>
+
+</body>
+</html>
