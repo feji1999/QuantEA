@@ -25,6 +25,17 @@
         #spot::placeholder {
             text-align: center; /* Centers the placeholder text */
         }
+        #currencySelector {
+            background-color: gold;
+            color: black;
+            font-size: 24px;
+            font-weight: bold;
+            border: solid 2px;
+            height: 60px;
+            position: inline;
+            top: 10px;
+            left: 20%;
+        }
 
         #results{
             color: gold;
@@ -49,23 +60,38 @@
 <body>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+        
+<div class="centered">
+    <!-- Dropdown button -->
+    <select id="currencySelector">
+        <option value="">Select Currency Pair</option>
+        <option value="EUR/USD">EUR/USD</option>
+        <option value="USD/JPY">USD/JPY</option>
+        <option value="GBP/USD">GBP/USD</option>
+        <option value="AUD/USD">AUD/USD</option>
+        <option value="USD/CAD">USD/CAD</option>
+        <option value="USD/CHF">USD/CHF</option>
+        <option value="NZD/USD">NZD/USD</option>
+    </select>
     
-    <div class="centered">
-        <input type="text" id="spot" onfocus="this.select();" placeholder="(Enter: Spot Price)">
+    
+    <input type="text" id="spot" onfocus="this.select();" placeholder="(Enter: Spot Price)">
         <div id="results" style="margin-top: 20px;"></div>
         <button id="advisor" onclick="spotx()"s>
             <h1>Quant Analysis(Hourly)</h1>
         </button>
+
+        <div style="height: 30px; width: max; position: relative;"></div>
+        <div id="chart">
+            <!-- Displays the Forex Charts Hourly Candle Trend forecast after function runs successfully -->
+        </div>
+        <div style="height: 30px; width: max; position: relative;"></div>
+    
+        <div id="mychart" style="width: 100%; height: 500px;flex-direction: row;"></div>
         
-    </div>
+        
+</div>
 
-    <div style="height: 30px; width: max; position: relative;"></div>
-    <div id="chart">
-        <!-- Displays the Forex Charts Hourly Candle Trend forecast after function runs successfully -->
-    </div>
-    <div style="height: 30px; width: max; position: relative;"></div>
-
-    <div id="myRadarChart" style="width: 100%; height: 500px;flex-direction: row;"></div>
     
     <script src="realtime.js"></script>
     <script src="algos.js"></script>

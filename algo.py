@@ -1,3 +1,7 @@
+'''Implementation of Absolute Position Direction Algorithm using Python 
+first developed by Fejiro Eruotor in 2022 to determine the price action
+of a given investment instrument'''
+
 import os
 import time
 import math
