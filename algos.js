@@ -98,53 +98,131 @@ function spotx() {
   Plotly.addTraces('mychart', newPoint);
 }
 
-// Initial Plotly KPI chart setup
+
+function getChartConfig() {
+  const screenWidth = window.innerWidth;
+  let fontSize = 30; // Default font size for larger screens
+  let showAnnotations = true; // Default to showing annotations
+
+  if (screenWidth <= 480) {
+      fontSize = 14; // Small font size for mobile devices
+      showAnnotations = false; // Hide annotations on small screens
+  } else if (screenWidth <= 768) {
+      fontSize = 20; // Medium font size for tablets
+  }
+
+  return { fontSize, showAnnotations };
+}
+
+
+const { fontSize, showAnnotations } = getChartConfig();
+
 const initialData = [];
 const layout = {
-  title: 'Trader KPI Chart',
-  xaxis: {
-      title: 'Risk-Reward Ratio',
-      range: [0, 1],
-      tickformat: '%'
-  },
-  yaxis: {
-      title: 'Win Ratio',
-      range: [0, 1],
-      tickformat: '%'
-  },
-  shapes: [
-      // Quadrant lines
-      {
-          type: 'line',
-          x0: 0.5,
-          y0: 0,
-          x1: 0.5,
-          y1: 1,
-          line: {
-              color: 'yellow',
-              width: 2
-          }
-      },
-      {
-          type: 'line',
-          x0: 0,
-          y0: 0.5,
-          x1: 1,
-          y1: 0.5,
-          line: {
-              color: 'yellow',
-              width: 2
-          }
-      }
-  ]
+    title: 'Trades Probability Chart',
+    xaxis: {
+        title: 'Risk-Reward-Ratio',
+        range: [0, 1],
+        tickformat: '%'
+    },
+    yaxis: {
+        title: 'Win-Ratio',
+        range: [0, 1],
+        tickformat: '%'
+    },
+    shapes: [
+        // Quadrant lines
+        {
+            type: 'line',
+            x0: 0.5,
+            y0: 0,
+            x1: 0.5,
+            y1: 1,
+            line: {
+                color: 'yellow',
+                width: 2
+            }
+        },
+        {
+            type: 'line',
+            x0: 0,
+            y0: 0.5,
+            x1: 1,
+            y1: 0.5,
+            line: {
+                color: 'yellow',
+                width: 2
+            }
+        }
+    ],
+    annotations: showAnnotations ? [
+        {
+            x: 0.25,
+            y: 0.75,
+            text: 'B+ Setups',
+            showarrow: false,
+            font: {
+                size: fontSize,
+                color: 'rgba(200, 200, 200, 0.5)'
+            },
+            xref: 'paper',
+            yref: 'paper'
+        },
+        {
+            x: 0.75,
+            y: 0.75,
+            text: 'A+ Setups',
+            showarrow: false,
+            font: {
+                size: fontSize,
+                color: 'rgba(200, 200, 200, 0.5)'
+            },
+            xref: 'paper',
+            yref: 'paper'
+        },
+        {
+            x: 0.25,
+            y: 0.25,
+            text: 'B Setups',
+            showarrow: false,
+            font: {
+                size: fontSize,
+                color: 'rgba(200, 200, 200, 0.5)'
+            },
+            xref: 'paper',
+            yref: 'paper'
+        },
+        {
+            x: 0.75,
+            y: 0.25,
+            text: 'A Setups',
+            showarrow: false,
+            font: {
+                size: fontSize,
+                color: 'rgba(200, 200, 200, 0.5)'
+            },
+            xref: 'paper',
+            yref: 'paper'
+        }
+    ] : []
 };
 
 Plotly.newPlot('mychart', initialData, layout);
 
 // Event listener for "Enter" key press
 document.getElementById("spot").addEventListener("keyup", function (event) {
-  event.preventDefault();
-  if (event.keyCode === 13) {
-      document.getElementById("advisor").click();
-  }
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("advisor").click();
+    }
+});
+
+// Redraw the chart when the window is resized
+window.addEventListener('resize', () => {
+    const { fontSize, showAnnotations } = getChartConfig();
+    layout.annotations.forEach(annotation => {
+        annotation.font.size = fontSize;
+    });
+    layout.annotations = showAnnotations ? layout.annotations : [];
+    Plotly.relayout('mychart', layout);
 });
