@@ -226,3 +226,34 @@ window.addEventListener('resize', () => {
     layout.annotations = showAnnotations ? layout.annotations : [];
     Plotly.relayout('mychart', layout);
 });
+
+//Save data into flask server(python)
+document.getElementById("saveData").addEventListener("click", function() {
+    const spot = parseFloat(document.getElementById("spot").value);
+    const entry = Math.sin(spot);
+    const direction = Math.sin(spot); // This should be your computed direction
+
+    const data = {
+        Date: new Date().toISOString().split('T')[0],
+        Time: new Date().toTimeString().split(' ')[0],
+        Entry_Price: spot,
+        Sine_Close_Price: entry,
+        Entry_Forecast: direction,
+        Actual_Close_Price: null
+    };
+
+    fetch('http://localhost:5000/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
