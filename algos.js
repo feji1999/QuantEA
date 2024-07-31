@@ -23,7 +23,7 @@ document.getElementById("currencySelector").addEventListener("change", async fun
 
 //EA main function
 function spotx() {
-  const spot = document.getElementById("spot").value;
+const spot = parseFloat(document.getElementById("spot").value);
   const wallclock = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const ranges = [
       { min: -1.0, max: -0.9, color: "red", height: 275, text: "900 MPIP Catch" },
@@ -60,7 +60,7 @@ function spotx() {
 
   // Determine direction
   const direction = Math.sin(x);
-  const degree = (H % 360); // Maps hour to degree
+  const entry = Math.sin(spot); // get the sine value of the actual entry, will use later in y-axis value computation
 
   // Get the advice element
   const advice = document.getElementById("results");
@@ -89,7 +89,7 @@ function spotx() {
   // Add new data point to KPI chart
   const newPoint = {
       x: [Math.abs(direction)], // Risk-Reward Ratio
-      y: [Math.abs(direction)], // Win Ratio
+      y: [Math.abs(entry)], // Win Ratio
       mode: 'markers',
       type: 'scatter',
       name: direction >= 0 ? 'Bullish' : 'Bearish',
