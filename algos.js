@@ -1,26 +1,28 @@
 //Select currencypair function
 document.getElementById("currencySelector").addEventListener("change", async function() {
-  const selectedCurrency = this.value;
-  const [base, quote] = selectedCurrency.split('/');
-  const apiKey = 'H5C4BHJSC3IGB0LX'; //YOUR_ALPHA_VANTAGE_API_KEY
-
-  const url = `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${base}&to_currency=${quote}&apikey=${apiKey}`;
-
-  try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const exchangeRate = data['Realtime Currency Exchange Rate']['5. Exchange Rate'];
-      
-      if (exchangeRate) {
-          document.getElementById("spot").value = exchangeRate;
-      } else {
-          console.error('Exchange rate not found in the response');
-      }
-  } catch (error) {
-      console.error('Error fetching the currency data:', error);
-  }
-});
-
+    const selectedCurrency = this.value;
+    const [base, quote] = selectedCurrency.split('/');
+    const apiKey = 'H5C4BHJSC3IGB0LX'; // Your Alpha Vantage API key
+  
+    const url = `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${base}&to_currency=${quote}&apikey=${apiKey}`;
+  
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+  
+        if (data && data['Realtime Currency Exchange Rate'] && data['Realtime Currency Exchange Rate']['5. Exchange Rate']) {
+            const exchangeRate = data['Realtime Currency Exchange Rate']['5. Exchange Rate'];
+            document.getElementById("spot").value = exchangeRate;
+        } else {
+            console.error('Exchange rate not found in the response:', data);
+            document.getElementById("results").innerHTML = 'Exchange rate not found. Please try again.';
+        }
+    } catch (error) {
+        console.error('Error fetching the currency data:', error);
+        document.getElementById("results").innerHTML = 'Error fetching the currency data. Please try again.';
+    }
+  });
+  
 //EA main function
 function spotx() {
 const spot = parseFloat(document.getElementById("spot").value);
