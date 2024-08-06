@@ -24,7 +24,7 @@
             background-color: rgb(140, 206, 206);
         }
         #spot::placeholder {
-            text-align: center; /* Centers the placeholder text */
+            text-align: center;
         }
         #currencySelector {
             background-color: gold;
@@ -37,8 +37,7 @@
             top: 10px;
             left: 20%;
         }
-
-        #results{
+        #results {
             color: gold;
         }
         #advisor {
@@ -51,7 +50,6 @@
         #advisor h1 {
             margin: 0;
         }
-
         #saveData {
             background-color: gold;
             color: black;
@@ -63,30 +61,66 @@
             flex-direction: column;
             align-items: center;
         }
+        #trademonitor {
+            display: flex;
+            background-color: gold;
+            color: black;
+            height: 500px;
+            width: 100%;
+            position: relative;
+            justify-content: space-between;
+        }
+        .kanban-column {
+            width: 25%;
+            background-color: rgb(140, 206, 206);
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-y: auto;
+        }
+        
+        .kanban-item {
+            padding: 8px;
+            margin: 4px 0;
+            background-color: #f4f4f4;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        #ganttItems {
+            position: relative;
+            overflow: hidden;
+            height: 100px;
+        }
+
+        @keyframes marquee {
+        from { left: 0; }
+        to { left: 100%; }
+        }
+        .marquee-item {
+        animation: marquee 216000s linear forwards;
+        }
     </style>
 </head>
 <body>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-        
-<div class="centered">
-    <!-- Dropdown button -->
-    <select id="currencySelector">
-        <option value="">Select Currency Pair</option>
-        <option value="EUR/USD">EUR/USD</option>
-        <option value="USD/JPY">USD/JPY</option>
-        <option value="GBP/USD">GBP/USD</option>
-        <option value="AUD/USD">AUD/USD</option>
-        <option value="USD/CAD">USD/CAD</option>
-        <option value="USD/CHF">USD/CHF</option>
-        <option value="NZD/USD">NZD/USD</option>
-    </select>
-    
-    
-    <input type="text" id="spot" onfocus="this.select();" placeholder="Spot Price(FX)" readonly>
+    <div class="centered">
+        <!-- Dropdown button -->
+        <select id="currencySelector">
+            <option value="">Select Currency Pair</option>
+            <option value="EUR/USD">EUR/USD</option>
+            <option value="USD/JPY">USD/JPY</option>
+            <option value="GBP/USD">GBP/USD</option>
+            <option value="AUD/USD">AUD/USD</option>
+            <option value="USD/CAD">USD/CAD</option>
+            <option value="USD/CHF">USD/CHF</option>
+            <option value="NZD/USD">NZD/USD</option>
+        </select>
+
+        <input type="text" id="spot" onfocus="this.select();" placeholder="Spot Price(FX)" readonly>
         <div id="results" style="margin-top: 20px;"></div>
-        <button id="advisor" onclick="spotx()"s>
-            <h1>Quant Analysis(Hourly)</h1>
+        <button id="advisor" onclick="spotx()">
+            <h1>Generate Quant Analysis</h1>
         </button>
 
         <div style="height: 30px; width: max; position: relative;"></div>
@@ -94,15 +128,25 @@
             <!-- Displays the Forex Charts Hourly Candle Trend forecast after function runs successfully -->
         </div>
         <div style="height: 30px; width: max; position: relative;"></div>
-    
-        <div id="mychart" style="width: 100%; height: 500px;flex-direction: row;"></div>
+
+        <div id="mychart" style="width: 100%; height: 500px; flex-direction: row;"></div>
         <button id="saveData">Save Data</button>
-        
-        
-</div>
+    </div>
 
-    
+    <div id="trademonitor">
+        <div class="kanban-column" id="pendingOrders">
+            <div class="kanban-header">Pending Orders</div>
+        </div>
+        <div class="kanban-column wide" id="ganttChart">
+            <div class="kanban-header">In Progress (0-60 mins)</div>
+            <div class="marquee" id="ganttItems"></div>
+        </div>
+        <div class="kanban-column" id="finalizedTrades">
+            <div class="kanban-header">Finalized Trades</div>
+        </div>
+    </div>
+
+    <script src="monitor.js"></script>
     <script src="algos.js"></script>
-
 </body>
 </html>
