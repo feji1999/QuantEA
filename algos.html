@@ -21,6 +21,7 @@
             height: 60px;
             width: 38%;
             font-size: 18px;
+            background-color: rgb(140, 206, 206);
         }
         #spot::placeholder {
             text-align: center; /* Centers the placeholder text */
@@ -82,7 +83,7 @@
     </select>
     
     
-    <input type="text" id="spot" onfocus="this.select();" placeholder="(Enter: Spot Price)">
+    <input type="text" id="spot" onfocus="this.select();" placeholder="Spot Price(FX)" readonly>
         <div id="results" style="margin-top: 20px;"></div>
         <button id="advisor" onclick="spotx()"s>
             <h1>Quant Analysis(Hourly)</h1>
