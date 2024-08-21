@@ -1,3 +1,30 @@
+//trade objective function
+function addObjective() {
+    const objectiveInput = document.getElementById('tradeObjective');
+    const objectiveText = objectiveInput.value.trim();
+
+    if (objectiveText !== "") {
+        const listItem = document.createElement('li');
+
+        // Get the current date and time
+        const currentDate = new Date();
+        const dateStr = currentDate.toLocaleDateString(); // Format: mm/dd/yyyy
+        const timeStr = currentDate.toLocaleTimeString(); // Format: hh:mm:ss AM/PM
+
+        // Create the content with a vertical bar separator
+        listItem.textContent = `${objectiveText} | ${dateStr} ${timeStr}`;
+
+        // Append the list item to the objective list
+        document.getElementById('objectiveList').appendChild(listItem);
+
+        // Clear the input field after adding
+        objectiveInput.value = "";
+    } else {
+        alert("Please enter a valid trade objective.");
+    }
+}
+
+
 // Select currency pair function
 let fxpair = '';
 document.getElementById("currencySelector").addEventListener("change", async function() {
