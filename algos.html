@@ -31,7 +31,7 @@
             color: black;
             height: 60px;
             position: relative;
-            top: 10px;
+            top: 2px;
         }
         #spot {
             height: 60px;
@@ -121,10 +121,12 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <div class="centered">   
+        <h1 style="color: gold; font-size: 24px;">Trader's Dashboard 2024 | QuantEA&trade; </h1>
+        
         <!-- Trade Objective Section -->
         <h2 style="color: gold; font-size: 24px;">Trade Objectives</h2>
         <input type="textarea" id="tradeObjective" placeholder="Enter your trade objective" />
-        <button id="addObjectiveButton" onclick="addObjective()"><h1>Generate Objective</h1></button>
+        <button id="addObjectiveButton" onclick="addObjective()"><h1>+</h1></button>
     
         <ul id="objectiveList" style="color: gold; font-size: 20px;"></ul>
     </div>
@@ -172,6 +174,9 @@
             <div class="kanban-header">Finalized Trades</div>
         </div>
     </div>
+
+    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+    <div class="elfsight-app-0eb2297e-d66d-4160-ba50-c6a68b3f0690" data-elfsight-app-lazy></div>
 
     <script src="monitor.js"></script>
     <script src="algos.js"></script>

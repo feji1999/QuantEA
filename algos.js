@@ -27,6 +27,7 @@ function addObjective() {
 
 // Select currency pair function
 let fxpair = '';
+
 document.getElementById("currencySelector").addEventListener("change", async function() {
     const selectedCurrency = this.value;
     fxpair = selectedCurrency;  // Update fxpair dynamically
