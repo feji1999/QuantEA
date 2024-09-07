@@ -56,6 +56,24 @@
         #results {
             color: gold;
         }
+        #compound {
+            background-color: gold;
+            color: black;
+            height: 60px;
+            position: relative;
+            top: 10px;
+        }
+        #compound h1 {
+            margin: 0;
+        }
+
+        .comp {
+            height: 60px;
+            width: 80%;
+            font-size: 18px;
+            background-color: rgb(140, 206, 206);
+        }
+        
         #advisor {
             background-color: gold;
             color: black;
@@ -121,20 +139,36 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <div class="centered">   
-        <h1 style="color: gold; font-size: 24px;">Trader's Dashboard 2024 | QuantEA&trade; </h1>
-        
+        <h1 style="color: gold; font-size: 24px;"><u>Trader's Dashboard 2024 | QuantEA&trade;</u> </h1>
+    <div class="centered">
+        <h1 style="color: gold; font-size: 24px;"><u>Compound Interest Calculator</u></h1>
+    <h1 style="color: gold; font-size: 24px;">
+    <label for="initialAmount">Initial Amount ($):</label>
+    <input type="number" class="comp" id="initialAmount" placeholder="Enter Initial Amount" required><br><br>
+
+    <label for="weeklyGrowthRate">Weekly Growth Rate (%):</label>
+    <input type="number" class="comp" id="weeklyGrowthRate" step="0.01" placeholder="Enter weekly Growth Rate" required><br><br>
+
+    <label for="numberOfWeeks">Number of Weeks:</label>
+    <input type="number" class="comp" id="numberOfWeeks" placeholder="Enter number of Weeks" required><br><br>
+    </h1>
+    <button id="compound" onclick="calculate()">Calculate</button>
+
+    <h1 id="result" style="color: gold; font-size: 24px;">Final Compounded Amount: $0.00</h1>
+    </div>
+
         <!-- Trade Objective Section -->
-        <h2 style="color: gold; font-size: 24px;">Trade Objectives</h2>
+        <h2 style="color: gold; font-size: 24px;"><u>Trade Objectives</u></h2>
         <input type="textarea" id="tradeObjective" placeholder="Enter your trade objective" />
         <button id="addObjectiveButton" onclick="addObjective()"><h1>+</h1></button>
     
         <ul id="objectiveList" style="color: gold; font-size: 20px;"></ul>
     </div>
     
-    
 
     <div class="centered">
         <!-- Dropdown button -->
+        <h2 style="color: gold; font-size: 24px;"><u>Hourly Trade Forecaster</u></h2>
         <select id="currencySelector">
             <option value="">Select Currency Pair</option>
             <option value="EUR/USD">EUR/USD</option>
@@ -181,5 +215,26 @@
 
     <script src="monitor.js"></script>
     <script src="algos.js"></script>
+
+    <script>
+        function calculate() {
+            // Get user inputs
+            const initialAmount = parseFloat(document.getElementById("initialAmount").value);
+            const weeklyGrowthRate = parseFloat(document.getElementById("weeklyGrowthRate").value) / 100;
+            const numberOfWeeks = parseInt(document.getElementById("numberOfWeeks").value);
+
+            // Check if the inputs are valid
+            if (isNaN(initialAmount) || isNaN(weeklyGrowthRate) || isNaN(numberOfWeeks)) {
+                alert("Please enter valid numbers for all fields.");
+                return;
+            }
+
+            // Calculate the compounded amount
+            const finalAmount = initialAmount * Math.pow((1 + weeklyGrowthRate), numberOfWeeks);
+
+            // Display the result
+            document.getElementById("result").textContent = `Final compounded amount: $${finalAmount.toFixed(2)}`;
+        }
+    </script>
 </body>
 </html>
