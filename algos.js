@@ -36,6 +36,7 @@ document.getElementById("currencySelector").addEventListener("change", async fun
     const [base, quote] = selectedCurrency.split('/');
     const apiKey = 'H5C4BHJSC3IGB0LX'; // Your Alpha Vantage API key
 
+    
     const url = `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${base}&to_currency=${quote}&apikey=${apiKey}`;
 
     try {
@@ -55,89 +56,105 @@ document.getElementById("currencySelector").addEventListener("change", async fun
     }
 });
 
+
+//Administrative Failsafe Pause
+const toolIsPaused = false;
+
 // EA main function
+// Updated spotx function to render horizontal candles with ENTRY/TP/SL zones
 function spotx() {
     const spot = parseFloat(document.getElementById("spot").value);
-    console.log('Spot Value:', spot);  // Debugging
+    const chart = document.getElementById("chart");
 
     const wallclock = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     const ranges = [
-        { min: -1.0, max: -0.9, color: "red", height: 275, text: "900 MPIP Catch" },
-        { min: -0.9, max: -0.8, color: "red", height: 250, text: "800 MPIP Catch" },
-        { min: -0.8, max: -0.7, color: "red", height: 225, text: "700 MPIP Catch" },
-        { min: -0.7, max: -0.6, color: "red", height: 200, text: "600 MPIP Catch" },
-        { min: -0.6, max: -0.5, color: "red", height: 175, text: "500 MPIP Catch" },
-        { min: -0.5, max: -0.4, color: "red", height: 150, text: "400 MPIP Catch" },
-        { min: -0.4, max: -0.3, color: "red", height: 125, text: "300 MPIP Catch" },
-        { min: -0.3, max: -0.2, color: "red", height: 100, text: "200 MPIP Catch" },
-        { min: -0.2, max: -0.1, color: "red", height: 75, text: "100 MPIP Catch" },
-        { min: 0, max: 0.1, color: "green", height: 75, text: "100 MPIP Catch" },
-        { min: 0.1, max: 0.2, color: "green", height: 100, text: "200 MPIP Catch" },
-        { min: 0.2, max: 0.3, color: "green", height: 125, text: "300 MPIP Catch" },
-        { min: 0.3, max: 0.4, color: "green", height: 150, text: "400 MPIP Catch" },
-        { min: 0.4, max: 0.5, color: "green", height: 175, text: "500 MPIP Catch" },
-        { min: 0.5, max: 0.6, color: "green", height: 200, text: "600 MPIP Catch" },
-        { min: 0.6, max: 0.7, color: "green", height: 225, text: "700 MPIP Catch" },
-        { min: 0.7, max: 0.8, color: "green", height: 250, text: "800 MPIP Catch" },
-        { min: 0.8, max: 0.9, color: "green", height: 275, text: "900 MPIP Catch" },
-        { min: 0.9, max: 1.0, color: "green", height: 300, text: "1000 MPIP Catch" }
+        { min: -1.0, max: -0.9, color: "red", height: 275 },
+        { min: -0.9, max: -0.8, color: "red", height: 250 },
+        { min: -0.8, max: -0.7, color: "red", height: 225 },
+        { min: -0.7, max: -0.6, color: "red", height: 200 },
+        { min: -0.6, max: -0.5, color: "red", height: 175 },
+        { min: -0.5, max: -0.4, color: "red", height: 150 },
+        { min: -0.4, max: -0.3, color: "red", height: 125 },
+        { min: -0.3, max: -0.2, color: "red", height: 100 },
+        { min: -0.2, max: -0.1, color: "red", height: 75 },
+        { min: 0, max: 0.1, color: "green", height: 75 },
+        { min: 0.1, max: 0.2, color: "green", height: 100 },
+        { min: 0.2, max: 0.3, color: "green", height: 125 },
+        { min: 0.3, max: 0.4, color: "green", height: 150 },
+        { min: 0.4, max: 0.5, color: "green", height: 175 },
+        { min: 0.5, max: 0.6, color: "green", height: 200 },
+        { min: 0.6, max: 0.7, color: "green", height: 225 },
+        { min: 0.7, max: 0.8, color: "green", height: 250 },
+        { min: 0.8, max: 0.9, color: "green", height: 275 },
+        { min: 0.9, max: 1.0, color: "green", height: 300 }
     ];
 
-    // Core functionality
     const D = new Date();
     const H = D.getHours();
-
-    // Calculate fibH
     const fibH = wallclock[H % 12] + wallclock[(H - 1 + 12) % 12];
-
-    // Main Computation
     const spotx = (24 / H) * fibH * spot;
-    const x = spotx.toFixed(0); // rounds the value
+    const x = spotx.toFixed(0);
 
-    // Determine direction
     const direction = Math.sin(x);
-    const entry = Math.sin(spot); // get the sine value of the actual entry, will use later in y-axis value computation
+    const entry = Math.sin(spot);
+    const fxpair = document.getElementById("currencySelector").value;
 
-    console.log('Direction:', direction, 'Entry:', entry);  // Debugging
-
-    // Get the advice element
     const advice = document.getElementById("results");
     advice.innerHTML = direction >= 0
         ? "Prepare for a Buy Entry Market Movement &uarr;&uarr;&uarr;"
         : "Prepare for a Sell Entry Market Movement &darr;&darr;&darr;";
 
-    // Find the appropriate range
     const range = ranges.find(r => direction >= r.min && direction < r.max);
+    if (!range) return;
 
-    if (range) {
-        // Create and style the candle
-        const candle = document.createElement("div");
-        candle.style.background = range.color;
-        candle.style.width = "24px";
-        candle.style.height = `${range.height}px`;
-        candle.style.position = "relative";
-        candle.style.left = "1%";
-        candle.textContent = range.text;
-        candle.style.writingMode = "vertical-rl";
-        candle.style.color = "white";
+    const takeProfitHeight = range.height;
+    const entryHeight = 30;
+    const stopLossHeight = Math.round(takeProfitHeight / 3);
 
-        document.getElementById("chart").appendChild(candle);
+    const candle = document.createElement("div");
+    candle.classList.add("candle");
+
+    const tp = document.createElement("div");
+    tp.style.height = takeProfitHeight + "px";
+    tp.style.background = range.color;
+    tp.innerText = direction >= 0 ? "BUY" : "SELL";
+
+    const ep = document.createElement("div");
+    ep.style.height = entryHeight + "px";
+    ep.style.background = "gold";
+    ep.innerText = "ENTRY";
+
+    const sl = document.createElement("div");
+    sl.style.height = stopLossHeight + "px";
+    sl.style.background = "gray";
+    sl.innerText = "STOP";
+
+    // For buy: TP > ENTRY > SL; for sell: SL > ENTRY > TP
+    if (direction >= 0) {
+        candle.appendChild(tp);
+        candle.appendChild(ep);
+        candle.appendChild(sl);
+    } else {
+        candle.appendChild(sl);
+        candle.appendChild(ep);
+        candle.appendChild(tp);
     }
 
-    // Add new data point to KPI chart
+    chart.appendChild(candle);
+
     const newPoint = {
-        x: [Math.abs(direction)], // Risk-Reward Ratio
-        y: [Math.abs(entry)], // Win Ratio
+        x: [Math.abs(direction)],
+        y: [Math.abs(entry)],
         mode: 'markers',
         type: 'scatter',
         name: direction >= 0 ? `Bullish (${fxpair})` : `Bearish (${fxpair})`,
         marker: { size: 12, color: direction >= 0 ? 'green' : 'red' }
     };
 
-    console.log('New Point:', newPoint);  // Debugging
-
     Plotly.addTraces('mychart', newPoint);
 }
+
+
 
 function getChartConfig() {
     const screenWidth = window.innerWidth;

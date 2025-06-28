@@ -6,237 +6,217 @@
     <title>Forex Charts Hourly Candle Trend Forecast</title>
     <style>
         body {
-            background-color: rgb(32, 100, 101);
-            border: gold solid 4px;
-            padding: 2px;
-        }
-        #chart {
-            width: 100%;
-            position: relative;
-            left: 2%;
-            display: flex;
-            align-items: flex-end;
-        }
-        #tradeObjective{
-            height: 60px;
-            width: 38%;
-            font-size: 18px;
-            background-color: rgb(140, 206, 206);
-        }
-        #tradeObjective::placeholder {
-            text-align: center;
-        }
-        #addObjectiveButton {
-            background-color: gold;
-            color: black;
-            height: 60px;
-            position: relative;
-            top: 2px;
-        }
-        #spot {
-            height: 60px;
-            width: 38%;
-            font-size: 18px;
-            background-color: rgb(140, 206, 206);
-        }
-        #spot::placeholder {
-            text-align: center;
-        }
-        #currencySelector {
-            background-color: gold;
-            color: black;
-            font-size: 24px;
-            font-weight: bold;
-            border: solid 2px;
-            height: 60px;
-            position: inline;
-            top: 10px;
-            left: 20%;
-        }
-        #results {
+            background-color: rgb(24, 26, 27);
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: gold;
         }
-        #compound {
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: rgb(32, 100, 101);
+            border: 2px solid gold;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.02);
+        }
+        .collapsible {
             background-color: gold;
             color: black;
-            height: 60px;
-            position: relative;
-            top: 10px;
-        }
-        #compound h1 {
-            margin: 0;
-        }
-
-        .comp {
-            height: 60px;
-            width: 80%;
-            font-size: 18px;
-            background-color: rgb(140, 206, 206);
-        }
-        
-        #advisor {
-            background-color: gold;
-            color: black;
-            height: 60px;
-            position: relative;
-            top: 10px;
-        }
-        #advisor h1 {
-            margin: 0;
-        }
-        #saveData {
-            background-color: gold;
-            color: black;
-            height: 50px;
-            position: relative;
-        }
-        .centered {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #trademonitor {
-            display: flex;
-            background-color: gold;
-            color: black;
-            height: 500px;
+            cursor: pointer;
+            padding: 15px;
             width: 100%;
-            position: relative;
+            border: none;
+            outline: none;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .active, .collapsible:hover {
+            background-color: rgb(230, 190, 50);
+        }
+        .content {
+            padding: 10px 0;
+            display: none;
+            overflow: hidden;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+        button.primary {
+            background-color: gold;
+            color: black;
+            font-weight: bold;
+            border: none;
+        }
+        .kanban-board {
+            display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
+            background-color: gold;
+            color: black;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
         }
         .kanban-column {
-            width: 25%;
             background-color: rgb(140, 206, 206);
-            margin: 10px;
-            padding: 10px;
             border-radius: 5px;
-            overflow-y: auto;
+            flex: 1;
+            margin: 10px;
+            min-width: 250px;
+            padding: 10px;
         }
-        
+        .kanban-column h3 {
+            text-align: center;
+        }
         .kanban-item {
-            padding: 8px;
-            margin: 4px 0;
             background-color: #f4f4f4;
+            color: black;
+            padding: 8px;
+            margin: 5px 0;
             border-radius: 4px;
             border: 1px solid #ddd;
         }
-        #ganttItems {
-            position: relative;
-            overflow: hidden;
-            height: 100px;
+        #chart {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
         }
-
-        @keyframes marquee {
-        from { left: 0; }
-        to { left: 100%; }
+        .candle {
+            width: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            font-size: 10px;
+            color: white;
+            font-weight: bold;
         }
-        .marquee-item {
-        animation: marquee 216000s linear forwards;
+        .candle div {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <div class="centered">   
-        <h1 style="color: gold; font-size: 24px;"><u>Trader's Dashboard 2024 | QuantEA&trade;</u> </h1>
-    <div class="centered">
-        <h1 style="color: gold; font-size: 24px;"><u>Compound Interest Calculator</u></h1>
-    <h1 style="color: gold; font-size: 24px;">
-    <label for="initialAmount">Initial Amount ($):</label>
-    <input type="number" class="comp" id="initialAmount" placeholder="Enter Initial Amount" required><br><br>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <label for="weeklyGrowthRate">Weekly Growth Rate (%):</label>
-    <input type="number" class="comp" id="weeklyGrowthRate" step="0.01" placeholder="Enter weekly Growth Rate" required><br><br>
-
-    <label for="numberOfWeeks">Number of Weeks:</label>
-    <input type="number" class="comp" id="numberOfWeeks" placeholder="Enter number of Weeks" required><br><br>
-    </h1>
-    <button id="compound" onclick="calculate()">Calculate</button>
-
-    <h1 id="result" style="color: gold; font-size: 24px;">Final Compounded Amount: $0.00</h1>
-    </div>
-
-        <!-- Trade Objective Section -->
-        <h2 style="color: gold; font-size: 24px;"><u>Trade Objectives</u></h2>
-        <input type="textarea" id="tradeObjective" placeholder="Enter your trade objective" />
-        <button id="addObjectiveButton" onclick="addObjective()"><h1>+</h1></button>
-    
-        <ul id="objectiveList" style="color: gold; font-size: 20px;"></ul>
-    </div>
-    
-
-    <div class="centered">
-        <!-- Dropdown button -->
-        <h2 style="color: gold; font-size: 24px;"><u>Hourly Trade Forecaster</u></h2>
-        <select id="currencySelector">
-            <option value="">Select Currency Pair
-
-            </option>
-            <option value="EUR/USD">EUR/USD</option>
-            <option value="USD/JPY">USD/JPY</option>
-            <option value="GBP/USD">GBP/USD</option>
-            <option value="AUD/USD">AUD/USD</option>
-            <option value="USD/CAD">USD/CAD</option>
-            <option value="USD/CHF">USD/CHF</option>
-            <option value="AUD/CAD">AUD/CAD</option>
-            <option value="BTC/USD">BTC/USD</option>
-        </select>
-
-        <input type="text" id="spot" onfocus="this.select();" placeholder="Spot Price(FX)" readonly>
-        <div id="results" style="margin-top: 20px;"></div>
-        <button id="advisor" onclick="spotx()">
-            <h1>Generate Quant Analysis</h1>
-        </button>
-
-        <div style="height: 30px; width: max; position: relative;"></div>
-        <div id="chart">
-            <!-- Displays the Forex Charts Hourly Candle Trend forecast after function runs successfully -->
-        </div>
-        <div style="height: 30px; width: max; position: relative;"></div>
-
-        <div id="mychart" style="width: 100%; height: 500px; flex-direction: row;"></div>
-        <button id="saveData">Save Data</button>
-    </div>
-
-    <div id="trademonitor">
-        <div class="kanban-column" id="pendingOrders">
-            <div class="kanban-header">Pending Orders</div>
-        </div>
-        <div class="kanban-column wide" id="ganttChart">
-            <div class="kanban-header">In Progress (0-60 mins)</div>
-            <div class="marquee" id="ganttItems"></div>
-        </div>
-        <div class="kanban-column" id="finalizedTrades">
-            <div class="kanban-header">Finalized Trades</div>
+<h1 style="text-align: center;"> AltosQuant Dashboard™ | V2025</h1>
+<div class="dashboard">
+    <div class="card">
+        <button class="collapsible">Compound Interest Calculator</button>
+        <div class="content">
+            <label>Initial Amount ($):</label>
+            <input type="number" id="initialAmount" placeholder="Enter Initial Amount">
+            <label>Weekly Growth Rate (%):</label>
+            <input type="number" id="weeklyGrowthRate" step="0.01" placeholder="Enter Weekly Growth Rate">
+            <label>Number of Weeks:</label>
+            <input type="number" id="numberOfWeeks" placeholder="Enter Number of Weeks">
+            <button class="primary" onclick="calculate()">Calculate</button>
+            <h3 id="result">Final Compounded Amount: $0.00</h3>
         </div>
     </div>
 
-    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-    <div class="elfsight-app-0eb2297e-d66d-4160-ba50-c6a68b3f0690" data-elfsight-app-lazy></div>
+    <div class="card">
+        <button class="collapsible">Trade Objectives</button>
+        <div class="content">
+            <input type="text" id="tradeObjective" placeholder="Enter your trade objective">
+            <button class="primary" onclick="addObjective()">Add Objective</button>
+            <ul id="objectiveList"></ul>
+        </div>
+    </div>
 
-    <script src="monitor.js"></script>
-    <script src="algos.js"></script>
+    <div class="card">
+        <button class="collapsible">Hourly Trade Forecaster</button>
+        <div class="content">
+            <label>Select Currency Pair:</label>
+            <select id="currencySelector">
+                <option value="">Select Pair</option>
+                <option value="EUR/USD">EUR/USD</option>
+                <option value="USD/JPY">USD/JPY</option>
+                <option value="GBP/USD">GBP/USD</option>
+                <option value="AUD/USD">AUD/USD</option>
+                <option value="USD/CAD">USD/CAD</option>
+                <option value="USD/CHF">USD/CHF</option>
+                <option value="AUD/CAD">AUD/CAD</option>
+                <option value="BTC/USD">BTC/USD</option>
+            </select>
+            <input type="text" id="spot" onfocus="this.select();" placeholder="Spot Price (FX)" readonly>
+            <div id="results"></div>
+            <button class="primary" onclick="spotx()">Generate Quant Analysis</button>
+        </div>
+    </div>
 
-    <script>
-        function calculate() {
-            // Get user inputs
-            const initialAmount = parseFloat(document.getElementById("initialAmount").value);
-            const weeklyGrowthRate = parseFloat(document.getElementById("weeklyGrowthRate").value) / 100;
-            const numberOfWeeks = parseInt(document.getElementById("numberOfWeeks").value);
+    <div class="card" style="grid-column: 1 / -1;">
+        <button class="collapsible">Trades Probability Chart</button>
+        <div class="content">
+            <div id="chart"></div>
+            <div id="mychart" style="width: 100%; height: 500px;"></div>
+            <button id="saveData" class="primary">Save Data</button>
+        </div>
+    </div>
+</div>
 
-            // Check if the inputs are valid
-            if (isNaN(initialAmount) || isNaN(weeklyGrowthRate) || isNaN(numberOfWeeks)) {
-                alert("Please enter valid numbers for all fields.");
-                return;
-            }
+<div class="kanban-board">
+    <div class="kanban-column">
+        <h3>Pending Orders</h3>
+        <div id="pendingOrders"></div>
+    </div>
+    <div class="kanban-column">
+        <h3>In Progress</h3>
+        <div id="ganttItems"></div>
+    </div>
+    <div class="kanban-column">
+        <h3>Finalized Trades</h3>
+        <div id="finalizedTrades"></div>
+    </div>
+</div>
 
-            // Calculate the compounded amount
-            const finalAmount = initialAmount * Math.pow((1 + weeklyGrowthRate), numberOfWeeks);
+<script src="monitor.js"></script>
+<script src="algos.js"></script>
+<script>
+function calculate() {
+    const initialAmount = parseFloat(document.getElementById("initialAmount").value);
+    const weeklyGrowthRate = parseFloat(document.getElementById("weeklyGrowthRate").value) / 100;
+    const numberOfWeeks = parseInt(document.getElementById("numberOfWeeks").value);
+    if (isNaN(initialAmount) || isNaN(weeklyGrowthRate) || isNaN(numberOfWeeks)) {
+        alert("Please enter valid numbers for all fields.");
+        return;
+    }
+    const finalAmount = initialAmount * Math.pow((1 + weeklyGrowthRate), numberOfWeeks);
+    document.getElementById("result").textContent = `Final compounded amount: $${finalAmount.toFixed(2)}`;
+}
 
-            // Display the result
-            document.getElementById("result").textContent = `Final compounded amount: $${finalAmount.toFixed(2)}`;
+var coll = document.getElementsByClassName("collapsible");
+for (let i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
         }
-    </script>
+    });
+}
+</script>
+
 </body>
 </html>
